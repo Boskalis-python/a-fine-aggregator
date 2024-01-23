@@ -1,0 +1,55 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\setlength\parindent{0pt}
+\usepackage{geometry}
+\geometry{margin=1.5in}
+
+\begin{document}
+
+\begin{center}
+  \Large{Preference score aggregation}
+\end{center}
+
+
+This document describes an aggregation algorithm for use in preference-based design and decision making. In short, the following two starting principles apply to this algorithm:
+
+\begin{enumerate}
+    \item it should reflect relative scoring as encountered in actual design and decision-making practice.
+
+    \item it should adhere to the governing mathematics in a one-dimensional affine space, which is the mathematical model applicable to preference score(s).
+\end{enumerate}
+
+The algorithm therefore consists of two operations: (1) normalizing the preference scores of all alternatives per criterion, and (2) finding the representative aggregated preference score $P^*$ for each alternative using the weighted least squares method. These two operations are further elaborated mathematically below.
+
+\subsection*{Normalization}
+
+For normalization, the standard score (z-score) method is used. This yields a normalization that preserves information about the population of preference scores and reads as follows:
+
+\begin{equation}
+    z_{i,j} = \frac{p_{i,j}-\mu_j}{\sigma_j}\textrm{ for }
+    i=1,2,...,I \textrm{; }
+    j=1,2,...,J
+\end{equation}
+
+Here $z_{i,j}$ is the normalized score of alternative $i$ for criterion $j$; $p_{i,j}$ is the preference score of alternative $i$ for criterion $j$; $\mu_j$ is the mean of all preference scores $p$ for criterion $j$; $\sigma_j$ is the standard deviation of all preference scores $p$ for criterion $j$. By performing this normalization for all criteria $J$, the preference scores are transformed to a single scale with the same properties ($\mu_J=0$, $\sigma_J=1$). 
+
+\subsection*{Weighted least squares}
+
+Since all $z_{i,j}$ scores are now on a single scale, it is possible to compare all normalized scores per alternative with each other. To find the representative aggregated preference score of an alternative that provides a best fit of all (weighted and relative) scores for each criterion, a minimization of the weighted least squares difference between this aggregated score and each of the (normalized) individual scores on all criteria is applied. This is expressed mathematically as follows:
+
+\begin{equation}
+     \textit{Minimize} \text{\ }S_i = \sum_{j=1}^{J} w_j * (z_{i,j} - P_i^*)^2
+\end{equation}
+
+Note that since the search is for a single representative aggregated preference score, the model function $f(x_{i,j}, \beta_i)$ from the classical weighted least square method is replaced by $P_i^*$. The solution to this minimization can be found by differentiating with respect to $P_i^*$ and equating it to zero. Since $\sum_{j=1}^{J}w_j=1$, this results in the following analytical expression for the representative aggregated preference score:
+
+\begin{equation}
+    P_i^* = \sum_{j=1}^{J} w_j * z_{i,j}
+\end{equation}
+
+\end{document}
